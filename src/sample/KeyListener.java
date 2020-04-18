@@ -6,7 +6,7 @@ import lc.kra.system.keyboard.event.GlobalKeyEvent;
 
 import static sample.Main.*;
 
-public class Threading extends Thread{
+public class KeyListener extends Thread{
 
 
     @Override
