@@ -5,50 +5,54 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import lc.kra.system.keyboard.GlobalKeyboardHook;
-import lc.kra.system.keyboard.event.GlobalKeyAdapter;
-import lc.kra.system.keyboard.event.GlobalKeyEvent;
 
-import java.io.DataOutputStream;
-import java.io.OutputStream;
-import java.net.Socket;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
+import java.nio.channels.DatagramChannel;
 
 public class Main extends Application {
 
-    static String nickname = "";
-
+    public static String nickname = "";
+    static DatagramChannel client = null;
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
         primaryStage.setTitle("KeySender");
         primaryStage.setScene(new Scene(root, 500, 275));
         primaryStage.show();
+        client = DatagramChannel.open();
+        client.bind(null);
+
 
 
     }
 
-    public static boolean validChar(char c) {
+    public static boolean validChar(char c) { //bunun olayı zaten mc de algılanan tuşların verisini sunucuya göndermemek
         String valids = "bcfghijklmnoprtuvyzx";
         //System.out.println(nickname);
-        return  (valids.contains(String.valueOf(c)));
+        return (valids.contains(String.valueOf(c)));
     }
 
 
-    public static void sendDataToServer(String data) {
-        String serverName = "localhost";
-        int port = 1231;
-        try {
-            Socket client = new Socket(serverName, port);
-            OutputStream outToServer = client.getOutputStream();
-            DataOutputStream out = new DataOutputStream(outToServer);
+    public static void sendData(String msg) {
 
-            out.writeUTF(data);
-        } catch (Exception e) {
+
+        System.out.println("gönderiliyor.");
+        try {
+
+            ByteBuffer buffer = ByteBuffer.wrap(msg.getBytes());
+            InetSocketAddress serverAddress = new InetSocketAddress("35.189.251.114",
+                    1231);
+
+            client.send(buffer, serverAddress);
+            System.out.println(msg + " gönderildi.");
+            buffer.clear();
+            buffer.flip();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
-
     public static void main(String[] args) {
         launch(args);
     }

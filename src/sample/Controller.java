@@ -26,7 +26,7 @@ public class Controller {
             alert.setContentText("Lütfen isim giriniz.");
 
         alert.showAndWait();
-        Thread thread= new KeyListener();
+        Thread thread = new KeyListener();
         thread.start();
     }
 

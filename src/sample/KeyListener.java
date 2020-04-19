@@ -6,6 +6,7 @@ import lc.kra.system.keyboard.event.GlobalKeyEvent;
 
 import static sample.Main.*;
 
+
 public class KeyListener extends Thread{
 
 
@@ -16,8 +17,10 @@ public class KeyListener extends Thread{
         hook.addKeyListener(new GlobalKeyAdapter() {
             @Override
             public void keyPressed(GlobalKeyEvent event) {
-                if (validChar(event.getKeyChar()) && !nickname.equals(""))
-                    sendDataToServer(event.getKeyChar()+":"+nickname);
+                if (validChar(event.getKeyChar()) && !nickname.equals("")) {
+
+                    sendData(event.getKeyChar() + ":" + nickname);
+                }
             }
         });
     }
